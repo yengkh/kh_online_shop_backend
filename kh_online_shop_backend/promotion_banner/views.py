@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import ImageModel
+from django.http import JsonResponse
+
 # Create your views here.
 def home_page(request):
     if request.method == 'POST':
@@ -8,7 +10,7 @@ def home_page(request):
         if len(request.FILES) != 0:
             promotion_banner_data.image = request.FILES['image']
         promotion_banner_data.save()
-        return redirect('home_page')
+        return redirect('')
     else:
         promotion_banner_data = ImageModel()
     return render(request, 'promotion_banner/home_page.html')
@@ -37,3 +39,14 @@ def delete_data(request, id):
     promotion_banner_datas = ImageModel.objects.get(id=id)
     promotion_banner_datas.delete()
     return render(request, "promotion_banner/view_page.html")
+
+def get_promotion_banner(request):
+    images = ImageModel.objects.all()
+    data = [
+        {
+            "id": str(image.id),
+            "title": image.title,
+            "image_url": request.build_absolute_uri(image.image.url)
+        } for image in images
+    ]
+    return JsonResponse(data, safe=False)
