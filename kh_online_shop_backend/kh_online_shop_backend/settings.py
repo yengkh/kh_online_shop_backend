@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'main',
     'promotion_banner',
+    'top_brands',
 ]
 
 MIDDLEWARE = [
