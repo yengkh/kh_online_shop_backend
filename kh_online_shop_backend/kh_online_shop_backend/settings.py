@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     'main',
     'promotion_banner',
     'top_brands',
+    'product_category',
+    'products',
 ]
 
 MIDDLEWARE = [

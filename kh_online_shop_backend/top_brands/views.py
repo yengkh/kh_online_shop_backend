@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .models import TopBrand
 from datetime import datetime
@@ -45,3 +46,15 @@ def update_page(request, id):
     
     datas = TopBrand.objects.get(id=id)
     return render (request, 'top_brands/update_page.html', {'datas' : datas})
+
+def get_product_brand(request) :
+    images = TopBrand.objects.all()
+    data = [
+        {
+            "id": str(image.id),
+            'name' : image.name,
+            'imageUrl' : request.build_absolute_uri(image.banner.url)
+        } for image in images
+    ]
+    return JsonResponse(data, safe=False)
+
