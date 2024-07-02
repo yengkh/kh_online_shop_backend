@@ -50,7 +50,7 @@ def import_function(request):
         {
             'id' : str(all_data.id),
             'name' : all_data.name,
-            'imageUrl' : request.build_absolute_uri(all_data.banner.url)
+            'imageUrl' : request.build_absolute_uri(all_data.image.url)
         } for all_data in all_datas
     ]
-    return JsonResponse(data, safe=False)
+    return JsonResponse(data, safe=False) 

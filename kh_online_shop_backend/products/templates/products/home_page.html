@@ -29,7 +29,7 @@
     <div class="container position-relative ">
       <div class = "position-absolute "> 
         <h1 class = "text-center mt-1">Add New Product</h1>
-      <form action="" method="post" class = "mt-1" enctype = "multipart/form-data">
+      <form action="" method="post" class = "mt-1" enctype = "multipart/form-data" id = "productform">
         {% csrf_token %}
         <div class="form-group ">
           <div class= "d-flex gap-3 ">
@@ -58,7 +58,19 @@
                 <select class="form-select" aria-label="type" required name = "product_type">
                     <option value="Shoes">Shoes</option>
                     <option value="Shirt">Shirt</option>
+                    <option value="Jacket">Jacket</option>
                     <option value="Sneaker">Sneaker</option>
+                    <option value="Man">Man</option>
+                    <option value="Woman">Woman</option>
+                    <option value="T-Shirt">T-Shirt</option>
+                    <option value="Electronic">Electronic</option>
+                    <option value="Sport">Sport</option>
+                    <option value="Children">Children</option>
+                    <option value="Travel-Kit">Travel-Kit</option>
+                    <option value="Hat">Hat</option>
+                    <option value="Cosmetic">Cosmetic</option>
+                    <option value="Sun-Glasses">Sun-Glasses</option>
+                    <option value="Jean">Jean</option>
                   </select>
             </div>
               <div class = "col-4">
@@ -67,16 +79,27 @@
                     <option value="ZARA">ZARA</option>
                     <option value="CHANEL">CHANEL</option>
                     <option value="ADIDAS">ADIDAS</option>
+                    <option value="BRAND-A">BRAND-A</option>
+                    <option value="BRAND-B">BRAND-B</option>
+                    <option value="BRAND-C">BRAND-C</option>
+                    <option value="DIOR">DIOR</option>
+                    <option value="SAMSUNG">SAMSUNG</option>
+                    <option value="OPPO">OPPO</option>
+                    <option value="APPLE">APPLE</option>
+                    <option value="NIKE">NIKE</option>
+                    <option value="PRADA">PRADA</option>
+                    <option value="HERMES">HERMES</option>
+                    <option value="GUCCI">GUCCI</option>
                   </select>
               </div>
               <div class = "col-4">
                 <label for="black-color">Black Color Image</label>
-                <input class="form-control" type="file" id="formFileMultiple" multiple placeholder = "Choose file" name = "blakcolor" required>
-            </div>
-            <div class = "col-4">
+                <input class="form-control" type="file" id="formFileMultiple" multiple placeholder = "Choose file" name = "blakcolor" >
+              </div>
+              <div class = "col-4">
                 <label for="white-color">White Color Image</label>
-                <input class="form-control" type="file" id="formFileMultiple" multiple placeholder = "Choose file" name = "whitecolor" required>
-            </div>
+                <input class="form-control" type="file" id="formFileMultiple" multiple placeholder = "Choose file" name = "whitecolor" >
+              </div>
           </div>
           <br />
           <div class="mb-3 d-flex gap-3">
@@ -88,6 +111,11 @@
                 <label for="other-color-two">Other Color Two</label>
                 <input class="form-control" type="file" id="formFileMultiple" multiple placeholder = "Choose file" name = "othercolortwo" required>
             </div>
+            <div class = "col-4">
+              <label for="product_quantity">Product Quantity</label>
+              <br />
+              <input class = "form-control" type="number" name="product_quantity" id="product_quantity" required>
+            </div>
           </div>
           <br />
           <div class="form-floating">
@@ -96,13 +124,20 @@
           </div>
           <br />
           <div class="d-flex gap-3">
-            <a class="btn btn-primary col-6" type="button" href= "#">View Protion Banner List</a>
+            <a class="btn btn-primary col-6" type="button" href= " {% url "products:view_page" %} ">View Promotion Banner List</a>
             <button class="btn btn-primary col-6" type="submit">Submit</button>
           </div>
         </div>
       </form>
       </div>
     </div>
+    <script>
+      document.getElementById('productform').onsubmit = function() {
+        setTimeout(function() {
+          document.getElementById('productform').reset();
+        }, 1000);  // Adjust the timeout as needed to ensure the form is reset after submission
+      };
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
 </html>

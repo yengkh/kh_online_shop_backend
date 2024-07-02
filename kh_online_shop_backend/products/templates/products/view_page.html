@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>View Product Category</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+        <h2 class= "text-center">All Product Categories Are Here</h2>
+        <h4>By product Type</h4>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Man</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Woman Man</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Electronic</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Shoes</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Shirt</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Jacket</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Sneaker</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>T-Shirt</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Sport</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Children</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Travel-Kit</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Hat</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Cosmetic</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2 '>Sun-Glasses</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Jean</a>
+        <h4>By product Brand</h4>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Brand-A</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Brand-B</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>Brand-C</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>ZARA</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>CHANEL</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>ADIDAS</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>DIOR</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>SAMSUNG</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>OPPO</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>APPLE</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>NIKE</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>PRADA</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>HERMES</a>
+        <a href="#" class = 'btn btn-info me-3 mb-2'>GUCCI</a>
+        <h4>Product ID</h4>
+        <div class = "col-6">
+            <input type="text" name="product_id" id="product_id" class = "mb-3 form-control">
+            <a href="#" class = "btn btn-success pe-5 ps-5">Search</a>
+        </div>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Product Detail
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td>{{ item.id }}</td>                     
+                        <td>
+                            <table class = "mb-2">
+                                <tr>
+                                    <td>
+                                        {% for image in item.imagemodel_set.all %}
+                                            {% if image.black_color %}
+                                                <img src="{{ image.black_color.url }}" alt="product black color image" height="100px" class = "me-5">
+                                            {% endif %}
+                                            {% if image.white_color %}
+                                                <img src="{{ image.white_color.url }}" alt="product white color image" height="100px" class = "me-5">
+                                            {% endif %}
+                                            {% if image.other_color_one %}
+                                                <img src="{{ image.other_color_one.url }}" alt="product other color one image" height="100px" class = "me-5">
+                                            {% endif %}
+                                            {% if image.other_color_two %}
+                                                <img src="{{ image.other_color_two.url }}" alt="product other color two image" height="100px" class = "me-5">
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class= "mb-2">
+                                <tr>
+                                    <td class = "pe-5">Name : {{ item.name }}</td>
+                                    <td class = "pe-5">Type : {{ item.product_type }}</td>
+                                    <td class = "pe-5">Brand : {{ item.product_brand }}</td>
+                                    <td class = "pe-5">Quantity : {{ item.product_quantity }}</td>
+                                </tr>
+                            </table>
+                            <table class = "mb-2">
+                                {% for price in item.pricemodel_set.all %}
+                                    <tr>
+                                        <td class = "pe-5">Default Price : {{ price.default_price }}$ </td>
+                                        <td class = "pe-5">Discount Rate : {{ price.discount_rate }}% </td>
+                                        <td class = "pe-5">Discount Price : <span class = "text-warning">{{ price.discount_price }}$</span> </td>
+                                        <td class = "pe-5">Total Price : <span class = "text-danger">{{ price.total_price }}$</span> </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <table class = 'mb-2'>
+                                {% for rating in item.ratingstarmodel_set.all %}
+                                    <tr>
+                                        <td class= "pe-5">Total Stars {{ rating.total_stars }}</td>
+                                        <td class= "pe-5">Users Rate {{ rating.user_rate }}</td>
+                                        <td class= "pe-5">Averate Star  {{ rating.average_star }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <table >
+                                <p class = "btn btn-success">View Comment</p>
+                            </table>
+                            <table >
+                                <tr>
+                                    <td>
+                                        {{ item.detail }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <a href=" {% url "products:update_page" id=item.id %} " class = "btn btn-warning">Update</a>
+                            <br />
+                            <br />
+                            <a href=" {% url "products:delete_page" id=item.id %} " class = "btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+              
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

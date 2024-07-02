@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Update Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container position-relative">
+      <div class = "position-absolute  mt-2"> 
+        <h1 class = "text-center mt-3">Update Product</h1>
+      <form action="" method="post" class = "mt-3" enctype = "multipart/form-data">
+        {% csrf_token %}
+        <div class = "form-group">
+        {% comment %} Image {% endcomment %}
+            <div class = "gap-4 mb-2 d-flex">
+                {% for image in old_data.imagemodel_set.all %}
+                    <div class = 'me-3 mb-2'>
+                        {% if image.black_color %}
+                            <img src="{{ image.black_color.url }}" alt="product black color image" height="100px" class = "me-5">
+                            {% else %}
+                                <div class="image-placeholder position-relative rounded" style="height: 100px; width: 300px; background-color: #ccc;">
+                                    <p class = 'position-absolute top-50 start-50 translate-middle'>No Image</p>
+                                </div>
+                        {% endif %}
+                        <div>
+                            <label for="black-color">Black Color Image</label>
+                            <input class="form-control" type="file" id="formFileMultiple" multiple placeholder = "Choose file" name = "blakcolor" >
+                        </div>
+                    </div>
+                    <div class = 'me-3'>
+                        {% if image.white_color %}
+                            <img src="{{ image.white_color.url }}" alt="product white color image" height="100px" class = "me-5">
+                            {% else %}
+                                <div class="image-placeholder position-relative rounded" style="height: 100px; width: 300px; background-color: #ccc;">
+                                    <p class = 'position-absolute top-50 start-50 translate-middle'>No Image</p>
+                                </div>
+                        {% endif %}
+                        
+                        <div >
+                            <label for="white-color">White Color Image</label>
+                            <input class="form-control" type="file" id="formFileMultiple" multiple placeholder = "Choose file" name = "whitecolor" >
+                        </div>
+                    </div>
+                    <div class = 'me-3'>
+                        {% if image.other_color_one %}
+                            <img src="{{ image.other_color_one.url }}" alt="product other color one image" height="100px" class = "me-5">
+                        {% endif %}
+                        
+                        <div>
+                            <label for="other_color_one">Other Color One</label>
+                            <input class="form-control" type="file" id="formFileMultiple" multiple placeholder = "Choose file" name = "other_color_one" >
+                        </div>
+                    </div>
+                    <div class = 'me-3'>
+                        {% if image.other_color_two %}
+                            <img src="{{ image.other_color_two.url }}" alt="product other color two image" height="100px" class = "me-5">
+                        {% endif %}
+                        <div >
+                            <label for="other_color_two">Other Color Two</label>
+                            <input class="form-control" type="file" id="formFileMultiple" multiple placeholder = "Choose file" name = "other_color_two" >
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% comment %} Product Information {% endcomment %}
+            <div class = 'd-flex gap-5 mb-2'>
+                <div class = "col-2">
+                    <label for="name">Product Name</label>
+                    <input type="text" name="name" id="name" class = "form-control " required value = "{{old_data.name}}">
+                </div>
+                <div class = "col-2">
+                    <label for="product_type">Product Type</label>
+                    <select class="form-select" aria-label="type" required name = "product_type">
+                        <option selected> {{old_data.product_type}} </option>
+                        <option value="Shoes">Shoes</option>
+                        <option value="Shirt">Shirt</option>
+                        <option value="Jacket">Jacket</option>
+                        <option value="Sneaker">Sneaker</option>
+                        <option value="Man">Man</option>
+                        <option value="Woman">Woman</option>
+                        <option value="T-Shirt">T-Shirt</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Sport">Sport</option>
+                        <option value="Children">Children</option>
+                        <option value="Travel-Kit">Travel-Kit</option>
+                        <option value="Hat">Hat</option>
+                        <option value="Cosmetic">Cosmetic</option>
+                        <option value="Sun-Glasses">Sun-Glasses</option>
+                        <option value="Jean">Jean</option>
+                      </select>
+                </div>
+                <div class = "col-2">
+                    <label for="brand">Product Brand</label>
+                    <select class="form-select" aria-label="brand" required name = "product_brand">
+                        <option selected> {{old_data.product_brand}} </option>
+                        <option value="ZARA">ZARA</option>
+                        <option value="CHANEL">CHANEL</option>
+                        <option value="ADIDAS">ADIDAS</option>
+                        <option value="BRAND-A">BRAND-A</option>
+                        <option value="BRAND-B">BRAND-B</option>
+                        <option value="BRAND-C">BRAND-C</option>
+                        <option value="DIOR">DIOR</option>
+                        <option value="SAMSUNG">SAMSUNG</option>
+                        <option value="OPPO">OPPO</option>
+                        <option value="APPLE">APPLE</option>
+                        <option value="NIKE">NIKE</option>
+                        <option value="PRADA">PRADA</option>
+                        <option value="HERMES">HERMES</option>
+                        <option value="GUCCI">GUCCI</option>
+                      </select>
+                </div>
+                    <div class = "col-2">
+                        <label for="product_quantity">Product Quantity</label>
+                        <br />
+                        <input class = "form-control" type="number" name="product_quantity" id="product_quantity" required value = "{{old_data.product_quantity}}">
+                    </div>
+                </div>
+            {% for price in old_data.pricemodel_set.all %}
+            <div class = "d-flex gap-5 mb-2">
+                <div class = "col-2">
+                    <label for="price">Product Price</label>
+                    <input type="number" name="price" id="price" class = "form-control " required step="any" value = "{{price.default_price}}">
+                </div>
+                <div class = "col-2">
+                    <label for="dicount_rate">Discount Rate</label>
+                    <input type="number" name="dicount_rate" id="dicount_rate" class = "form-control " required step="any" value ="{{price.discount_rate}}">
+                </div>
+                <div class = "col-2">
+                    <label for="dicount_price">Discount Price</label>
+                    <input type="number" name="dictsort_price" id="dictsort_price" class = "form-control " required step="any" value ="{{price.discount_price}}">
+                </div>
+                <div class = "col-2">
+                    <label for="total_price">Total Price</label>
+                    <input type="number" name="total_price" id="total_price" class = "form-control " required step="any" value = "{{price.total_price}}">
+                </div>
+            </div>
+            {% endfor %}
+            {% for star in old_data.ratingstarmodel_set.all %}
+            <div class = 'd-flex gap-5 mb-4'>
+                <div class = "col-2">
+                    <label for="rating-star">Total Star</label>
+                    <input type="number" name="rating-star" id="rating-star" class = "form-control"  required required step="0.5" value = "{{star.total_stars}}">
+                </div>
+                <div class = "col-2">
+                    <label for="average_star">Average Star</label>
+                    <input type="number" name="average_star" id="average_star" class = "form-control"  required required step="0.5" value = "{{star.average_star}}">
+                </div>
+                <div class = "col-2">
+                    <label for="user_rate">Total User Rate</label>
+                    <input type="number" name="user_rate" id="user_rate" class = "form-control"  required required step="0.5" value = "{{star.user_rate}}">
+                </div>
+            </div>
+            {% endfor %}
+            <div class="form-floating mb-5">
+                <textarea class="form-control" placeholder="Enter product detail" id="floatingTextarea2" style="height: 200px" required name = "product_detail">{{old_data.detail}}</textarea>
+                <label for="floatingTextarea2">Product Detail</label>
+            </div>
+            <br />
+            <div class = 'd-flex justify-content-center align-items-center'>
+                <button type="submit" class="btn btn-primary col-6">Save</button>
+            </div>
+        </div>
+      </form>
+      <br />
+      <br />
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
