@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 from datetime import datetime
 from .models import Products, ImageModel, PriceModel, RatingStarModel
 
@@ -171,6 +171,102 @@ def export_function_2(request):
             'product_type': product.product_type,
             'product_brand': product.product_brand,
             'product_quantity' : product.product_quantity,
+            'comments': [
+                {
+                    'title': comment.title,
+                    'user_name': comment.user_name,
+                    'comment_total': comment.comment_total,
+                    'content': comment.content,
+                } for comment in product.commentmodel_set.all()
+            ],
+            'prices': [
+                {
+                    'title': price.title,
+                    'default_price': price.default_price,
+                    'discount_rate': price.discount_rate,
+                    'discount_price': price.discount_price,
+                    'total_price': price.total_price,
+                } for price in product.pricemodel_set.all()
+            ],
+            'ratings': [
+                {
+                    'title': rating.title,
+                    'total_stars': rating.total_stars,
+                    'user_rate': rating.user_rate,
+                    'average_star': rating.average_star,
+                } for rating in product.ratingstarmodel_set.all()
+            ],
+            'images': [
+                {
+                    'black_color': request.build_absolute_uri(image.black_color.url) if image.black_color else None,
+                    'white_color': request.build_absolute_uri(image.white_color.url) if image.white_color else None,
+                    'other_color_one': request.build_absolute_uri(image.other_color_one.url) if image.other_color_one else None,
+                    'other_color_two': request.build_absolute_uri(image.other_color_two.url) if image.other_color_two else None,
+                } for image in product.imagemodel_set.all()
+            ],
+        } for product in products
+    ]
+    return JsonResponse(data, safe=False)
+
+def search_by_type(request, p_type):
+    products = get_list_or_404(Products.objects.prefetch_related('pricemodel_set', 'commentmodel_set', 'ratingstarmodel_set', 'imagemodel_set'), product_type=p_type)
+    data = [
+        {
+            'id': str(product.id),
+            'name': product.name,
+            'detail': product.detail,
+            'upload_date': product.upload_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'product_type': product.product_type,
+            'product_brand': product.product_brand,
+            'product_quantity': product.product_quantity,
+            'comments': [
+                {
+                    'title': comment.title,
+                    'user_name': comment.user_name,
+                    'comment_total': comment.comment_total,
+                    'content': comment.content,
+                } for comment in product.commentmodel_set.all()
+            ],
+            'prices': [
+                {
+                    'title': price.title,
+                    'default_price': price.default_price,
+                    'discount_rate': price.discount_rate,
+                    'discount_price': price.discount_price,
+                    'total_price': price.total_price,
+                } for price in product.pricemodel_set.all()
+            ],
+            'ratings': [
+                {
+                    'title': rating.title,
+                    'total_stars': rating.total_stars,
+                    'user_rate': rating.user_rate,
+                    'average_star': rating.average_star,
+                } for rating in product.ratingstarmodel_set.all()
+            ],
+            'images': [
+                {
+                    'black_color': request.build_absolute_uri(image.black_color.url) if image.black_color else None,
+                    'white_color': request.build_absolute_uri(image.white_color.url) if image.white_color else None,
+                    'other_color_one': request.build_absolute_uri(image.other_color_one.url) if image.other_color_one else None,
+                    'other_color_two': request.build_absolute_uri(image.other_color_two.url) if image.other_color_two else None,
+                } for image in product.imagemodel_set.all()
+            ],
+        } for product in products
+    ]
+    return JsonResponse(data, safe=False)
+
+def search_product_by_brand(request, p_brand):
+    products = get_list_or_404(Products.objects.prefetch_related('pricemodel_set', 'commentmodel_set', 'ratingstarmodel_set', 'imagemodel_set'), product_brand=p_brand)
+    data = [
+        {
+            'id': str(product.id),
+            'name': product.name,
+            'detail': product.detail,
+            'upload_date': product.upload_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'product_type': product.product_type,
+            'product_brand': product.product_brand,
+            'product_quantity': product.product_quantity,
             'comments': [
                 {
                     'title': comment.title,
