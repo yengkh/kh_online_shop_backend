@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 from datetime import datetime
 from .models import Products, ImageModel, PriceModel, RatingStarModel
+from django.core.paginator import Paginator,PageNotAnInteger, EmptyPage
 
 date_time_now = datetime.now()
 dt_string = date_time_now.strftime("%d/%m/%Y %H:%M:%S")
@@ -114,7 +115,7 @@ def update_page(request, id):
         product.save()
 
         # Update ImageModel
-        images = product.imagemodel_set.first()  # Assuming only one related image set exists
+        images = product.imagemodel_set.first() 
         if images:
             if black_image:
                 images.black_color = black_image
@@ -127,7 +128,7 @@ def update_page(request, id):
             images.save()
 
         # Update PriceModel
-        prices = product.pricemodel_set.first()  # Assuming only one related price set exists
+        prices = product.pricemodel_set.first()  
         if prices:
             prices.default_price = price
             prices.discount_rate = discount_rate
@@ -136,7 +137,7 @@ def update_page(request, id):
             prices.save()
 
         # Update RatingStarModel
-        ratings = product.ratingstarmodel_set.first()  # Assuming only one related rating set exists
+        ratings = product.ratingstarmodel_set.first()  
         try:
             average_star = "{:.2f}".format(float(total_stars) / float(user_rate) if user_rate != 0 else 0)
             ratings.total_stars = total_stars
@@ -303,3 +304,75 @@ def search_product_by_brand(request, p_brand):
         } for product in products
     ]
     return JsonResponse(data, safe=False)
+
+def get_data_by_pagination(request):
+    
+    page = request.GET.get('page', 1)
+    
+    limit = request.GET.get('limit', 10)
+    
+    try:
+        
+        limit = int(limit)
+    except ValueError:
+        
+        limit = 10
+        
+    products = Products.objects.all().prefetch_related('pricemodel_set', 'commentmodel_set', 'ratingstarmodel_set', 'imagemodel_set')
+    paginator = Paginator(products, limit)
+    
+    try :
+        products = paginator.page(1)
+    except PageNotAnInteger:
+        
+        products = paginator.page(1)
+    except EmptyPage:
+        
+        products = paginator.page(paginator.num_pages)
+    
+    data = [
+        {
+            'id': str(product.id),
+            'name': product.name,
+            'detail': product.detail,
+            'upload_date': product.upload_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'product_type': product.product_type,
+            'product_brand': product.product_brand,
+            'product_quantity': product.product_quantity,
+            'comments': [
+                {
+                    'title': comment.title,
+                    'user_name': comment.user_name,
+                    'comment_total': comment.comment_total,
+                    'content': comment.content,
+                } for comment in product.commentmodel_set.all()
+            ],
+            'prices': [
+                {
+                    'title': price.title,
+                    'default_price': price.default_price,
+                    'discount_rate': price.discount_rate,
+                    'discount_price': price.discount_price,
+                    'total_price': price.total_price,
+                } for price in product.pricemodel_set.all()
+            ],
+            'ratings': [
+                {
+                    'title': rating.title,
+                    'total_stars': rating.total_stars,
+                    'user_rate': rating.user_rate,
+                    'average_star': rating.average_star,
+                } for rating in product.ratingstarmodel_set.all()
+            ],
+            'images': [
+                {
+                    'black_color': request.build_absolute_uri(image.black_color.url) if image.black_color else None,
+                    'white_color': request.build_absolute_uri(image.white_color.url) if image.white_color else None,
+                    'other_color_one': request.build_absolute_uri(image.other_color_one.url) if image.other_color_one else None,
+                    'other_color_two': request.build_absolute_uri(image.other_color_two.url) if image.other_color_two else None,
+                } for image in product.imagemodel_set.all()
+            ],
+        } for product in products
+    ]
+    return JsonResponse(data, safe=False)
+

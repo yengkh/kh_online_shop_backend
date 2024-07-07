@@ -10,4 +10,5 @@ urlpatterns = [
     path('delete-page/<uuid:id>/', views.delete_page, name='delete_page'),
     path('search-by-type/<str:p_type>/', views.search_by_type, name='search_by_type'),
     path('search-by-brand/<str:p_brand>/', views.search_product_by_brand, name="search_product_by_brand"),
+    path('get-data-by-pagination/', views.get_data_by_pagination, name="get_data_by_pagination"),
 ]
